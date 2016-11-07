@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Project #1 - Feature Detection and Matching, Computer Vision Fall 2016, WUSTL</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="Ying Wang">
+    <link rel="stylesheet" href="static/project3.css" type="text/css">
+  </head>
+  <body>
+
+    <header>
+    <h1><a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/index.html">Computer Vision, Fall 2016</a></h1>
+    <h2><a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/project1/">Project #1: Feature Detection and Matching</a></h2>
+    <div id="timestamp">
+    <p id="github">
+    <a href="https://github.com/damonwy/555_Project3.git">Click here for source codes!</a>
+    </p>
+      <p id="submit_time">
+      Date Submitted: 19 Sep 2016
+      </p>
+
+    </div>
+    <div id="author">
+      446216 (Ying Wang)
+    </div>
+    </header>
+
+    <section id="main_content">
+    <div id="description">
+      <h2><span>Project Description</span></h2>
+      <p>
+      <div class="quote">
+        In this project, you will write code to detect discriminating features in an image and find the best matching features in other images.  Your features should be reasonably invariant to translation, rotation, illumination, and scale, and you'll evaluate their performance on a suite of benchmark images. 
+
+        <div class="courtesy">
+          --&nbsp;Courtesy of <a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/project1/">Course Website</a>
+        </div> 
+      </div>
+      </p>
+      <p>
+      
+      </p>
+
+
+    <div id="Texture Synthesis">
+      <h2><span>Feature detection</span></h2>
+      <span></span>
+      <p>I implemented a basic feature detection algorithm mentioned in Chapter 4.1. The procedure is as follows:
+      <br></p>
+      <p>
+      1. Compute the horizontal and vertical derivatives of the srcImage Ix and Iy by convolving the original image with SobelX and SobelY kernels.<br>
+      2. Compute three images corresponding to the outer product of these gradients. (.* indicates pixel-wise multiplication)<br>
+          a. H11 = Ix .* Ix<br>
+          b. H12 = Ix .* Iy<br>
+          c. H22 = Iy .* Iy<br>
+      3. Convolve each of these three images with a larger Gaussian kernel.<br>
+      4. Compute a scalar interest measure using harmonic mean.<br>
+      5. Find if each pixel is a local maximum by choosing approriate threshold (I choose 0.05 as a threshold).<br>
+      </p>
+      <span>Trouble</span>
+      <p>
+      1. At first, I use the derivatives of Gaussians (window size 5x5 and sigma = 1) in the step one because a paper said the results are better than the other kernels. However, after doing some tests in the data set, I found that Sobel kernel works better than Gaussians (in this case).
+</p>
+
+      <span>Harris Operator Image</span>
+      <p>Here are the images of the Harris operator.
+      <p>
+ <table border="1">
+        <tr>
+            <th>srcImage</th>
+            <th>HarrisImage</th>
+         
+        </tr>
+        <tr>
+            <td><img src="img/graf1.ppm" width="500" height="350"></td>
+            <td><img src="img/graf_h.tga" width="500" height="350"></td>
+           
+            
+        </tr>
+        <tr>
+            <td><img src="img/wall1.ppm" width="500" height="350" ></td>
+            <td><img src="img/wall_h.tga" width="500" height="350"></td>      
+
+        </tr>
+        <!-- <tr>
+            <td><img src="img/leaf.jpg" width="500" height="350"></td>
+            <td><img src="img/random_leaf.jpg" width="500" height="350"></td>
+        </tr>
+        <tr>
+            <td><img src="img/wall.png" ></td>
+            <td><img src="img/" width="400" height="400"></td>
+        </tr> -->
+       
+    </table>
+<span>My Own Image</span>
+ <table border="1">
+        <tr>
+            <th>'1'</th>
+            <th>'2'</th>
+            
+        </tr>
+        <tr>
+            <td><img src="img/1.png" width="600" height="450"></td>
+            <td><img src="img/2.png" width="600" height="450"></td>
+            
+            
+        </tr>
+       
+    </table>
+
+
+    <span>Concept</span>
+    
+
+    </div>
+
+    <div id="Feature Desriptor">
+      <h2><span>Feature Desriptor</span></h2>
+      <p>I implemented two descriptors, the simple 5x5 window descriptor and MOPS descriptor. </p>
+      <span>5x5 Window Descriptor</span>
+      <p>Simply save the surrounding 5x5=25 pixels of the center feature pixel.</p>
+      <span>MOPS Desriptor</span>
+      <p>The custom one is MOPS desriptor. </br>
+        1. Before loop through the features, convolve the image with a gaussian blur filter to get more accurate results during subsampling.</br>
+        2. For each feature, focus on a 40x40 window size subimage around the feature and scale the image down by a factor of five, create a 8x8 image.</br>
+        3. Rotate the image by dominate orientation to the horizontal.</br>
+
+      </p>
+      <h2><span>Feature Matching</span></h2>
+      <p>Basicly, I use two methods: SSD Matching and Ratio Distance Matching. </p>
+      
+      
+      <span>ROC curve</span>
+  
+      <p>
+    <table border="1">
+        <tr>
+            <th>'graf'</th>
+            <th>'leuven'</th>
+            
+        </tr>
+        <tr>
+            <td><img src="img/graf.png" width="600" height="450"></td>
+            <td><img src="img/leuven.png" width="600" height="450"></td>
+            
+            
+        </tr>
+        <!-- <tr>
+            <th>'bike'</th>
+            <th>'wall'</th>
+        </tr>
+        <tr>
+        <td><img src="img/bike.png" width="600" height="450"></td>
+        <td><img src="img/wall.jpg" width="600" height="450"></td>
+        </tr> -->
+    </table>
+    </p>
+
+    <span>Average AUC value for Window+SSD, Window+Ratio, MOPS+SSD, MOPS+Ratio</span>
+
+  <p>
+       <table border="1">
+        <tr>
+            <th>Compare</th>
+           
+            <th>wall</th>
+             <th>graf</th>
+            <th>leuven</th>
+            <th>bike</th>
+         
+        </tr>
+        <tr>
+            <td>window + ssd</td>
+            <td>0.699973</td>
+            <td>0.444535</td>
+            <td>0.418947</td>
+            <td>0.197086</td>
+            
+        </tr>
+        <tr>
+            <td>window + ratio</td>
+            <td>0.829765</td>
+            <td>0.494532</td>   
+            <td>0.775451</td>
+            <td>0.576539</td>   
+
+        </tr>
+        <tr>
+          <td>mops + ssd</td>
+            <td>0.752798</td>
+            <td>0.481204</td>
+            <td>0.788676</td>
+            <td>0.861049</td>
+        </tr>
+        <tr>
+          <td>mops + ratio</td>
+            <td>0.844074</td>
+            <td>0.595981</td>
+            <td>0.908687</td>
+            <td>0.882707</td>
+        </tr>
+        
+       
+    </table>
+    </p>
+    <span>Conclusions</span>
+    <p>
+    <li>
+        <ul>The "wall" set has much more feature points than other datasets, so when testing the AUC value, it takes longer time to complete than others. However, its result is the best among others.</ul>
+        <ul>The 'graf' set differs in orientations. From the result above, we can see that although MOPS has a relatively higher AUC value than the simple window algorithm, its value are still lower than other situations.</ul>
+        <ul>The 'leuven' set differs in contrast. Using the normalization we can achieve much higher AUC value.</ul>
+        <ul> The 'bikes' set differs in resolution. So it is often used to test scale invariance. The window + ssd algorithm did a bad job when testing this dataset. As we can see, MOPS improves a lot while window algorithm is fairly low.</ul>
+
+        </li></p>
+
+
+
+
+
+    <div id="bell">
+      <h2><span>Bell & Whistles(Extra Points)</span></h2>
+
+
+      <span>Adaptive Non-Maximal Suppression (ANMS)</span>
+      <p>
+      When we get the harris corners, it returns too many feature points, while not all of them are useful for matching. As a result, we only need to select part of them (fixed number points), and at the same time, making the selected points spread evenly across the whole image. To achieve this purpose, I try to implement the ANMS algorithm described in <a href="http://cs.brown.edu/courses/csci1950-g/asgn/proj6/resources/ImageMatching.pdf">Multi-Image Matching using Multi-Scale Oriented Patches</a>.I use an equivalent approach without search of radius r. My thoughts are as follows:</br>
+      1. Loop through all the local maximal value pixels in the image, for each pixel, loop through all the other local maximal points to find the closest point. First finding all possible points that have more than 1.11 times the corner strength of a certain point. I then find the smallest squared Euclidian distance between this point and a point in the described set. This is the minimum suppression radius. I perform this operation on all points and choose the 700 points with the highest suppression radiuses.
+
+      </p>
+
+
+      <span>Results</span>
+      <p>
+      Below are different corner detection results without ANMS and with ANMS:
+      </p>
+  
+<table border="1">
+        <tr>
+            <th>without ANMS</th>
+           
+            <th>with ANMS</th>
+             
+         
+        </tr>
+        <tr>
+             <td><img src="img/before.png" width="600" height="450"></td>
+            <td><img src="img/after.png" width="600" height="450"></td>
+            
+            
+        </tr>
+        </table>
+    </div>
+    
+
+    <div id="reference">
+      <h2><span>Reference</span></h2>
+      <ul>
+        <li><a href="http://cs.brown.edu/courses/csci1950-g/asgn/proj6/resources/ImageMatching.pdf">Multi-Image Matching using Multi-Scale Oriented Patches</a></li>
+      </ul>
+    </div>
+    </section>
+    <footer>
+    &copy; 2016 Ying Wang. All Rights Reserved.
+    </footer>
+  </body>
+</html>
+
+
