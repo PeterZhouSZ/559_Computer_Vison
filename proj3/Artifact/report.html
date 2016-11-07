@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Project #3 - Eigen Faces, Computer Vision Fall 2016, WUSTL</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="Ying Wang">
+    <link rel="stylesheet" href="static/project3.css" type="text/css">
+  </head>
+  <body>
+
+    <header>
+    <h1><a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/index.html">Computer Vision, Fall 2016</a></h1>
+    <h2><a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/project3/">Project #3: Eigen Faces</a></h2>
+    <div id="timestamp">
+    <p id="github">
+    <a href="https://github.com/damonwy/555_Project3.git">Click here for source codes!</a>
+    </p>
+      <p id="submit_time">
+      Date Submitted: 24 Oct 2016
+      </p>
+
+    </div>
+    <div id="author">
+      446216 (Ying Wang)
+    </div>
+    </header>
+
+    <section id="main_content">
+    <div id="description">
+      <h2><span>Project Description</span></h2>
+      <p>
+      <div class="quote">
+        In this project you will create a face recognition system. The program reduces each face image to a vector, then uses Principal Component Analysis (PCA) to find the space of faces. This space is spanned by just a few vectors, which means each face can be defined by just a set of coefficients weighting these vectors. You are given a skeleton program that provides a sophisticated command-line interface as well as most of the image and vector classes and operations you will need. Your job will be to fill in the functions that do PCA, projection into face space, determining if a vector represents a face, verifying a user based on a face, finding a face match given a set of user face information, and finding the size and position of a face in an image. 
+
+        <div class="courtesy">
+          --&nbsp;Courtesy of <a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/project1/">Course Website</a>
+        </div> 
+      </div>
+      </p>
+      <p>
+      
+      </p>
+
+
+    <div id="Texture Synthesis">
+      <h2><span>Testing recognition with cropped class images</span></h2>
+      <h3><span>Steps</span></h3>
+        <p>1. I use the cropped, neutral students to compute 10 eigenfaces. The following are the average face and eigenfaces.</p>
+        <p><center><table border="1">
+                    <tr>
+                        <th>Average Face</th>
+                        
+                    </tr>
+                    <tr>
+                    <td><center><img src="img/average_face.jpg" width="100" height="100"></center></td>
+                    </tr>
+                </table></center></p>
+
+        <p><center><table border="1">
+                    <tr>
+                    <th colspan="10"><center>Eigenfaces</center></th>
+                    </tr>
+                      <tr>
+                          
+                          <td><img src="img/eigen_face_0.jpg" width="100" height="100"></td>
+                          <td><img src="img/eigen_face_1.jpg" width="100" height="100"></td>
+                          <td><img src="img/eigen_face_2.jpg" width="100" height="100"></td>
+                          <td><img src="img/eigen_face_3.jpg" width="100" height="100"></td>
+                          <td><img src="img/eigen_face_4.jpg" width="100" height="100"></td>
+                          <td><img src="img/eigen_face_5.jpg" width="100" height="100"></td>
+                          <td><img src="img/eigen_face_6.jpg" width="100" height="100"></td>
+                          <td><img src="img/eigen_face_7.jpg" width="100" height="100"></td>
+                          <td><img src="img/eigen_face_8.jpg" width="100" height="100"></td>
+                          <td><img src="img/eigen_face_9.jpg" width="100" height="100"></td>
+                         
+                      </tr>   
+              </table></center></p>
+
+
+      <p>2. Use the same set of images to compute a userbase.</p>
+      <p>3. Recognize the photos in the interesting images folder. There are 17 out of 24 matches, which is 70.83% accuracy with 10 eigenfaces. Here are the results:</p>
+      <p><center>
+        <table border="1">
+          <tr>
+              <th>"interesting" faces</th>
+              <th>"neutral" faces</th>
+              <th>matched</th>
+              <th>mse</th>
+              <th>"interesting" faces</th>
+              <th>"neutral" faces</th>
+              <th>matched</th>
+              <th>mse</th>
+          
+          </tr>
+          <tr>
+              <td><img src="img/interesting/01.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/01.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>20307.2</td>
+     
+              <td><img src="img/interesting/13.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/13.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>21203.4</td>
+         
+          </tr>
+          <tr>
+              <td><img src="img/interesting/02.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/13.jpg" width="100" height="100"></td>
+              <td>N</td>
+              <td>96316.9</td>
+
+                <td><img src="img/interesting/14.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/14.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>9257.69</td>
+
+          </tr>
+        
+          <tr>
+              <td><img src="img/interesting/03.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/14.jpg" width="100" height="100"></td>
+              <td>N</td>
+              <td>23881.9</td>
+
+               <td><img src="img/interesting/15.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/24.jpg" width="100" height="100"></td>
+              <td>N</td>
+              <td>146398</td>
+          </tr>
+
+          <tr>
+              <td><img src="img/interesting/04.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/14.jpg" width="100" height="100"></td>
+              <td>N</td>
+              <td>76128.7</td>
+              <td><img src="img/interesting/16.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/12.jpg" width="100" height="100"></td>
+              <td>N</td>
+              <td>26764.8</td>
+          </tr>
+
+          <tr>
+              <td><img src="img/interesting/05.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/05.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>59347.2</td>
+              <td><img src="img/interesting/17.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/17.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>6016</td>
+          </tr>
+
+          
+          <tr>
+              <td><img src="img/interesting/06.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/06.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>21256.7</td>
+              <td><img src="img/interesting/18.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/18.jpg" width="100" height="100"></td>
+              <td>N</td>
+              <td>12600.2</td>
+          </tr>
+          <tr>
+              <td><img src="img/interesting/07.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/24.jpg" width="100" height="100"></td>
+              <td>N</td>
+              <td>58830.6</td>
+              <td><img src="img/interesting/19.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/19.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>35732.7</td>
+          </tr>
+          <tr>
+              <td><img src="img/interesting/08.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/08.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>12619.8</td>
+              <td><img src="img/interesting/20.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/20.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>12281</td>
+          </tr>
+          <tr>
+              <td><img src="img/interesting/09.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/09.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>11988.5</td>
+              <td><img src="img/interesting/21.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/23.jpg" width="100" height="100"></td>
+              <td>N</td>
+              <td>15118.1</td>
+           </tr> 
+          <tr>
+              <td><img src="img/interesting/10.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/10.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>33489.8</td>
+               <td><img src="img/interesting/22.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/22.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>14035.7</td>
+          </tr>
+          <tr>
+              <td><img src="img/interesting/11.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/11.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>17835.8</td>
+               <td><img src="img/interesting/23.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/23.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>3597.13</td>
+          </tr>
+          <tr>
+              <td><img src="img/interesting/12.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/12.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>45850</td>
+              <td><img src="img/interesting/24.jpg" width="100" height="100"></td>
+              <td><img src="img/neutral/24.jpg" width="100" height="100"></td>
+              <td>Y</td>
+              <td>6058.43</td>
+           </tr> 
+    </table></center></p>
+
+    <p>
+      4. Experiment with the number of eigenfaces used. Use the mean face plus 1 through 21 eigenfaces at a granularity of 2. Plot the result. 
+      
+    </p>
+    <p><center><table border="1">
+        <tr>
+            <th># of eigenfaces used</th>
+            <td>1</td>
+            <td>3</td>
+            <td>5</td>
+            <td>7</td>
+            <td>9</td>
+            <td>11</td>
+            <td>13</td>
+            <td>15</td>
+            <td>17</td>
+            <td>19</td>
+            <td>21</td>
+        </tr>
+        <tr>
+            <th># of faces correctly recognized</th>
+            <td>7</td>
+            <td>10</td>
+            <td>12</td>
+            <td>15</td>
+            <td>14</td>
+            <td>18</td>
+            <td>18</td>
+            <td>17</td>
+            <td>17</td>
+            <td>17</td>
+            <td>17</td> 
+        </tr>
+        </table></center>
+
+        </p>
+
+    <p><center><img src="img/plot.png" width="500" height="400"></center></p>
+
+      
+    <h3><span>Questions</span></h3>
+    <p>1. Trends in the plots. If the amount of eigenfaces is too small, we will get really bad result because they cannot accurately describe each face's features. As the number of eigenfaces increases to a certain number, the accuracy remains the same. </p>
+    <p>2. Show some errors. The first pair in 2nd row, we can see the changing direction of face will influence the result. The second pair in the last fourth row, the change of mouth shape and the size of eyes will also influence the result greatly. </p>
+
+
+    <h2><span>Cropping and finding faces</span></h2>
+    <h3><span>Steps</span></h3>
+      <p>1. Use the eigenfaces file computed in the previous experiment.</p>
+      <p>2. Use the program to crop the group/test_single.tga image. Here is the result: </p>
+      <p><center><table border="1">
+            <tr>
+                <td><img src="img/test_single.jpg" ></td>
+                <td><center><img src="img/test_cropped.jpg" > </center></td>
+
+            </tr>
+            <tr>
+                <td>Input image</td>
+                <td>Cropped image</td>
+            </tr>
+          </table>
+          </center>
+      </p>
+      <p>3. Use the program to crop a picture of myself.</p>
+      <p><center><table border="1">
+            <tr>
+                <td><img src="img/oid.jpg" alt=""></td>
+                <td><img src="img/cccc.jpg" ></td>
+            </tr>
+            <tr>
+                <td>Input image</td>
+                <td>Cropped image</td>
+            </tr>
+          </table>
+          </center>
+      </p>
+
+      
+ 
+
+
+      <p>4. Experiment with min_scale, max_scale, and step parameters to find ones that work accurately. After several try and error, min_scale=0.3, max_scale=0.6, step=0.01 are the best parameters to generate the marked image.
+</p>
+      <p>5. Mark the faces in two different group photos of students. List some correct and wrong results.</p>
+      Successful:
+      <p><center><img src="img/marked_faces.jpg"></center></p>
+      <p><center><img src="img/marked_faces2.jpg"></center></p>
+      <p><center><img src="img/marked_faces16.jpg"></center></p>
+      
+      Failed:
+      In this image, the person whose face isn't recognized is turning his head in the left direction. So his face is deformationed as to the camera's prospect. 
+      <p><center><img src="img/marked_faces10.jpg"></center></p>
+
+      <p>6. Mark a group picture of myself. </p>
+      <p>Then, I tried some other face databases such as <a href="http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html">The Database of Faces of AT&T Laboratories Cambridge</a>. The database includes 10 different faces of 40 people, in total 400 faces. Then, I generate 40 eigenfaces of size 25x25 from these faces. And it gave a much better result than the previous one.</p>
+      <p>Still, in the second group picture, some faces cannot be recognized and some faces are only recognized above nose. I think these errors are because of the face direction.</p>
+           <p><center><table border="1">
+            <tr>
+             
+              <th>Marked(ATT database)</th>
+              <th>Parameters</th>
+            </tr>
+       
+            <tr>
+               
+                <td><img src="img/student_id_marked.jpg" width="300"></td>
+                <td>min_scale=0.3<br>max_scale=0.6<br>step=0.01<br></td>
+                
+            </tr>
+            <tr>
+              
+               
+                <td><img src="img/chuzhong.jpg" width="300"></td>
+                <td>min_scale=0.3<br>max_scale=0.6<br>step=0.01<br></td>
+               
+            
+            </tr>
+            
+
+          </table>
+          </center>
+      </p>
+
+  
+    <h2><span>Verify Face</span></h2>
+
+
+      <h3><span>Questions</span></h3>
+        <p>I tried 50000, 60000, 70000 as the MSE threshold and it turns out that 60000 works best. The method I used is simply writing a script and writing down 24x24 verifying MSE values, then computing the false negarive and false positive rate of each threshold. The whole data is included in the excel file for reference.</p>
+        <p>Using 60000 as the best MSE threshold, the false negative rate is 3/24 = 12.5%. The false positive is:</p>
+        <p><table border="1">
+            <tr>
+              
+              <td>1</td>
+              <td>2</td>
+              <td>3</td>
+              <td>4</td>
+              <td>5</td>
+              <td>6</td>
+              <td>7</td>
+              <td>8</td>
+              <td>9</td>
+              <td>10</td>
+              <td>11</td>
+              <td>12</td>
+              <td>13</td>
+              <td>14</td>
+              <td>15</td>
+              <td>16</td>
+              <td>17</td>
+              <td>18</td>
+              <td>19</td>
+              <td>20</td>
+              <td>21</td>
+              <td>22</td>
+              <td>23</td>
+              <td>24</td>
+            </tr>
+            <tr>
+              <td>4.16% </td>
+              <td>0%</td>
+              <td>0%</td>
+              <td>0%</td>
+              <td>0%</td>
+              <td>0%</td>
+              <td>0%</td>
+              <td>0%</td>
+              <td>4.16%</td>
+              <td>4.16%</td>
+              <td>4.16%</td>
+              <td>8.33%</td>
+              <td>0%</td>
+              <td>8.33%</td>
+              <td>0%</td>
+              <td>12.5%</td>
+              <td>20.83%</td>
+              <td>0%</td>
+              <td>12.5%</td>
+              <td>16.67%</td>
+              <td>8.33%</td>
+              <td>4.16%</td>
+              <td>8.33%</td>
+              <td>20.83%</td>
+            </tr>
+            </table>
+            </p>
+
+
+
+
+
+  
+
+
+    <div id="bell">
+      <h2><span>Bell & Whistles(Extra Points)</span></h2>
+
+
+      <h3><span>1. Speed up</span></h3>
+      <p>I implement the speed up. without speed up, nrot is 2160698. after speed up, nrot is 1640.
+      </p>
+
+
+
+      <h3><span>2. Use other face database to get better recognization result.</span></h3>
+      <p>Some faces in the images that previously cannot be recognized now can be recognized using the new 40 eigenfaces I generated from the AT&T database. So it is more accurate and robust than before.</p>
+    </div>
+    
+
+    
+    </section>
+    <footer>
+    &copy; 2016 Ying Wang. All Rights Reserved.
+    </footer>
+  </body>
+</html>
+
+

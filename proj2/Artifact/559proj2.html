@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Project #2 - Panorama Mosaic Stitching, Computer Vision Fall 2016, WUSTL</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="Ying Wang">
+    <link rel="stylesheet" href="static/project3.css" type="text/css">
+  </head>
+  <body>
+
+    <header>
+    <h1><a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/index.html">Computer Vision, Fall 2016</a></h1>
+    <h2><a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/project1/">Project #2: Panorama Mosaic Stitching</a></h2>
+    <div id="timestamp">
+    <p id="github">
+    <a href="https://github.com/damonwy/555_Project3.git">Click here for source codes!</a>
+    </p>
+      <p id="submit_time">
+      Date Submitted: 5 Oct 2016
+      </p>
+
+    </div>
+    <div id="author">
+      446216 (Ying Wang)
+    </div>
+    </header>
+
+    <section id="main_content">
+    <div id="description">
+      <h2><span>Project Description</span></h2>
+      <p>
+      <div class="quote">
+        In this project, you will implement a system to combine a series of photographs into a 360 degree panorama (see panorama above). You will first detect discriminating features in the images and find the best matching features in the other images, using your code from Project 1 (or SIFT). For this project, you will then automatically align the photographs (determine their overlap and relative positions) and then blend the resulting photos into a single seamless panorama.
+
+        <div class="courtesy">
+          --&nbsp;Courtesy of <a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/project2/">Course Website</a>
+        </div> 
+      </div>
+      </p>
+      <p>
+      
+      </p>
+  
+  <h2><span>Overall Procedure</span></h2>
+    Basicly, the workflow of generating panoramic photos is as follows:<br>
+    <p>
+
+      <li>Take a bunch of photos.</li> 
+      <li>Warp them to spherical coordinate system.</li>
+        <li>Align them properly.</li>
+        <li>Stitch, crop and blend them to generate the final panorama.</li>
+    </p>
+
+    <div id="Texture Synthesis">
+      <h2><span>Details of each step</span></h2>
+
+      <h3><span>1. Warping to spherical coordinate system</span></h3>
+      <p> The focal length of the camera is 380 pixel. This is estimated by the formula: focal length in pixels = (image width in pixels) * (focal length in mm) / (CCD width in mm). According to the image we took, the width in pixels is 720. The focal length in mm is 18. The CCD width in mm is 22.71. Thus, the focal length is around 720/22.71 * 18 = 571.
+      <br></p>
+      <img src="img/warping.jpg" style="width: 500px; height: 300px;" alt="warping">
+      <p>
+      
+     <h3><span>2. Image align</span></h3>
+      <p> I use SIFT + RANSAC to imolement image alignment. The parameter I used are default 200 times for RANSAC and threshold 0.8 for SIFT method.</p>
+
+     
+   <h3><span>3. Blend Images</span></h3>
+      <p>1. Alpha Blending</p>
+      <p>I assign a weight function to the source image, which weight w(x) varies linearly from 1 to 0 at the edge.</p>
+
+      <p>I notice that when applying alpha blending, choosing appropriate window size (blendWidth) is very important. ’Good’ window can generate smooth but not ghosted panorama. If we want to avoid discontinuities, we can set the window size equivalent to the largest prominent feature. To avoid ghosting, we can set the window less than 2*size of smallest prominent feature. While this method is easy to implement, it can also cause blurring of high frequency detail if there are small registration errors. Details will be discussed as folllows.</p>
+
+  <h2><span>Good Results</span></h2>
+    <h3><span>1. Campus</span></h3>
+
+    <p>
+      <img style="width: 1200px; height: 138px;" alt="" src="img/campus_pano.jpg"><br>
+      <a href="img/campus_pano.jpg">High resolution</a><br>
+
+
+    </p>
+
+  <h3><span>2. Crazed Interloper</span></h3>
+    <p>This is a pano which the same person frequently runs into the camera.</p>
+<p>
+      <img style="width: 1200px; height: 138px;" alt="" src="img/ying_pano_best.jpg"><br>
+      <a href="img/ying_pano_best.jpg">High resolution</a><br>
+    </p>
+
+    
+
+    <h3><span>3. Inside a building</span></h3>
+    <p>We can see noticable seams in this panorama because of the large intensity variance. </p>
+    <p>
+      <img style="width: 1200px; height: 138px;" alt="" src="img/wall_pano.jpg"><br>
+      <a href="img/wall_pano.jpg">High resolution</a><br>
+    </p>
+ <h2><span>Bad Results</span></h2>
+    <h3><span>4. WashU [Bad Alignment]</span></h3>
+    <p>This panorama is actually a failure because the x translation in pairlist is only half of the actual x translation, which is only around 125. My idea is that there are several images whose texture is simple and similar to each other. Thus the alignmenet didn't work well among this set of images.</p>
+    <p>
+      <img style="width: 1200px; height: 138px;" alt="" src="img/school_pano.jpeg"><br>
+      <a href="img/school_pano.jpeg">High resolution</a><br>
+    </p>
+
+
+  <p>
+      <img style="width: 1200px; height: 138px;" alt="" src="img/pano.jpg"><br>
+      <a href="img/pano.jpg">High resolution</a><br>
+    </p>
+    <h3><span>5. Hillside in Forrest Park [Bad Focal Length]</span></h3>
+   <p>This pano is a failure because I used a wrong focal length parameter when warping images. Thus the result has many ghosting artifacts.</p>
+    <p>
+      <img style="width: 1200px; height: 138px;" alt="" src="img/hillside_pano.jpg"><br>
+      <a href="img/hillside_pano.jpg">High resolution</a><br>
+    </p>
+   
+
+    <h2><span>Conclusions</span></h2>
+    <p>Let's take a look at the result and analysis what worked and what didn't. </p>
+    <p><img style="width: 1200px; height: 138px;" alt="" src="img/ying_pano_note.jpg"><br>
+    <a href="img/ying_pano_note.jpg">High resolution</a><br></p>
+    <h3><span>The Good: (green part)</span></h3>
+    <p>
+        <li>1. Drift works well. This panorama turns out reasonly well in that it had very little vertical drift. We can see the panorama is aligned horizontally. </li>
+        <li>2. Alpha blending works well. We can barely notice the seam between pairing images.</li>
+        <li>3. Radial distortion correction works well. Notice the left edge is arc-shape instead of a straight line.</li>
+    </p>
+
+    <h3><span>The Bad: (red part)</span></h3>
+    <p>
+        <li>1. There are ghosting artifacts in those three regions. I think it is because I use a relatively large blend width to get a better result. As I decrease the blend width, the panorama became worse with more and more visible boundaries and sometimes even strange artifacts. Compare the following results with different blend widths: 50, 100, 200, 300, 400.</li>
+        <p>
+  <table border="1">
+    <tr><td>blendWidth = 50</td></tr>
+    <tr><td>
+        <img style="width: 1200px; height: 138px;" alt="50" src="img/pano_50.jpg">
+        <a href="img/pano_50.jpg">High resolution</a></td>
+    </tr>
+    
+    <tr><td>blendWidth = 100</td></tr>
+    <tr><td>
+        <img style="width: 1200px; height: 138px;" alt="50" src="img/pano_100.jpg">
+        <a href="img/pano_100.jpg">High resolution</a></td>
+    </tr>
+    <tr><td>blendWidth = 200</td></tr>
+    <tr><td>
+        <img style="width: 1200px; height: 138px;" alt="50" src="img/pano_200.jpg">
+        <a href="img/pano_200.jpg">High resolution</a></td>
+    </tr>
+    <tr><td>blendWidth = 300</td></tr>
+    <tr><td>
+        <img style="width: 1200px; height: 138px;" alt="50" src="img/pano_300.jpg">
+        <a href="img/pano_300.jpg">High resolution</a></td>
+    </tr>
+    <tr><td>blendWidth = 400</td></tr>
+    <tr><td>
+        <img style="width: 1200px; height: 138px;" alt="50" src="img/pano_400.jpg">
+        <a href="img/pano_400.jpg">High resolution</a></td>
+    </tr>
+
+
+
+  </table>
+        
+
+
+
+    </p>
+
+
+
+    <div id="bell">
+      <h2><span>Bell & Whistles(Extra Points)</span></h2>
+
+
+      <span>1. Support radial distortion correction inside WarpSpherical.cpp. </span>
+       <p> 
+        <table>
+        <tr><td>Without radial distortion correction</td></tr>
+        <tr><td><img style="width: 1200px; height: 138px;" src="img/ying_without_radial.jpg"></td></tr>
+        <tr><td>With radial distortion correction</td></tr>
+        <tr><td><img style="width: 1200px; height: 138px;" src="img/ying_pano_best.jpg" ></td></tr>
+        </table>
+        </p>
+
+      <p>Apparently, image with radial distortion correction has less artifacts near the boundaries. Thus we can get a sharper and clearer panorama using this method.</p>
+  
+      <span>2. Try a sequence in which the same person appears multiple times</span>
+    
+    </div>
+    
+
+    <div id="reference">
+      <h2><span>Reference</span></h2>
+      <ul>
+        <li><a href="http://www.cs.ubc.ca/~lowe/papers/brown03.pdf">[Brown & Lowe, 2003]Recognising Panoramas</a></li>
+      </ul>
+    </div>
+    </section>
+    <footer>
+    &copy; 2016 Ying Wang. All Rights Reserved.
+    </footer>
+  </body>
+</html>
+
+
