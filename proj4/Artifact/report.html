@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Project #4 - Single View Modeling, Computer Vision Fall 2016, WUSTL</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="Ying Wang">
+    <link rel="stylesheet" href="static/project3.css" type="text/css">
+  </head>
+  <body>
+
+    <header>
+    <h1><a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/index.html">Computer Vision, Fall 2016</a></h1>
+    <h2><a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/project4/">Project #4: Single View Modeling</a></h2>
+    <div id="timestamp">
+    <p id="github">
+    <a href="https://github.com/damonwy/559_Computer_Vison/tree/master/proj4">Click here for source codes!</a>
+    </p>
+      <p id="submit_time">
+      Date Submitted: 9 Nov 2016
+      </p>
+
+    </div>
+    <div id="author">
+      446216 (Ying Wang)
+    </div>
+    </header>
+
+    <section id="main_content">
+    <div id="description">
+      <h2><span>Project Description</span></h2>
+      <p>
+      <div class="quote">
+        <p>In this assignment, you will fill in various routines and ultimately create 3D texture-mapped models from a single image using the single view modeling method discussed in class. The steps of the project are:</p>
+        <p>
+      1. Image acquisition<br>
+      2. Calculate vanishing points<br>
+      3. Choose reference points<br>
+      4. Compute 3D coordinates of several points in the scene<br>
+      5. Define polygons based on these points.<br>
+      6. Compute texture maps for the polygons and output them to files.<br>
+      7. Create a 3D texture-mapped VRML model<br>
+      8. EXTRA CREDIT: Create a reverse perspective paper cutout of the object.<br>
+      9. Submit results<br>
+</p>
+
+        <div class="courtesy">
+          --&nbsp;Courtesy of <a href="http://www.cse.wustl.edu/~furukawa/cse559a/2016_fall/project1/">Course Website</a>
+        </div> 
+      </div>
+   
+
+
+    <div id="Texture Synthesis">
+      <h2><span>1. Source images "The Fifth Element"</span></h2>
+        <p>The image is a screenshot of movie "The Fifth Element".</p>
+        <img src="img/fifthelement/src.jpg" width="1200">
+      
+            
+      <h2><span>2. Points, lines and polygons</span></h3>
+          <p>Draw points, lines </p>
+          <img src="img/fifthelement/pointslines.png" width="1200">
+      <h2><span>3. Procedure of making the 3D model</span></h2>
+            <p>a. In the SVM UI Interface, I draw 3 X lines in green color, 5 Y lines in red color, and 4 Z lines in blue color, as showed in the aboved image. Choose "Tools->Compute_VPs" and the three vanishing points are computed and showed in the terminal. </p>
+            <p>b. I specify 4 points in ground XY plane as the four reference point, one point in Z axis as the reference height point. Push them into the stack and choose "Tools->Compute Homography" and the H, Hinv matrix are computed and showed in the terminal.</p>
+            <p>c. Then, I choose points above the knowned points and having the same XY coordinates and compute their positions. First push the known point on the ground, then push the point to be computed into the stack, and choose "Tools->Same_XY". Then, the unknown point becomes known and shows a rectangle around itself.</p>
+            <p>d. Use the newly computed point to compute the other points in the same Z plane. Push them in the same order as before, and choose "Tools->Same_Z_Plane". Then it is done.</p>
+            <p>e. I first draw 5 planes manually. Choose "Edit->Polygon". Enter "Ctrl" key then select the three vertices of the polygon to be drawed, press "Enter" key and the polygon will be automatically connected. It shows a small rectangle in the center.</p>
+            <p>f. Finally, choose "File->Save VRML" and it will save all files we need to generate the 3D model.</p>
+
+        <h2><span>4. Text outputs in a terminal</span></h2>
+            <p>Compute the vanishing points. Text outputs in a terminal of "Tools->Compute_VPs".</p>
+          <img src="img/fifthelement/vp1.png" width="500">
+          <p>Manually specify 4 points on the ground, push them into the stack and compute homography.</p>
+          <img src="img/fifthelement/refpoint.png" width="500"><br>
+            <img src="img/fifthelement/ref1.png" width="500">
+            <p>Text outputs in a terminal of "Tools->Compute Homography".</p>
+            <img src="img/fifthelement/hm.png" width="500"><br>
+            <p>Draw 5 polygons of up, back, ground, right, left faces of the images.</p>
+            <img src="img/fifthelement/polygon.png" width="1200"><br>
+          <h2><span>5. Still images (rendering) of the reconstructed VRML models</span></h2>
+
+                <p>The 3D model result displayed in MeshLab.</p>
+            <img src="img/fifthelement/3d.png" width="1200">
+            <img src="img/fifthelement/result01.png" width="1200">
+            <img src="img/fifthelement/result02.png" width="1200">
+
+           <h2><span>6. Texture map images</span></h2>
+
+            <p>Texture images: up, back, ground, right, left faces of the model generated.</p>
+             <img src="img/fifthelement/uppp.gif" width="400">
+            <img src="img/fifthelement/backkk.gif" width="400">
+            <img src="img/fifthelement/downnn.gif" width="400"><br>
+            <img src="img/fifthelement/righttt.gif" width="400">
+            <img src="img/fifthelement/lefttt.gif" width="400">
+            
+            <h2><span>7. Unwrapped model image</span></h2>
+
+
+            <p>Create XZ rectangle and sweep this rectangle to get unwrapped model.</p>
+            <img src="img/fifthelement/box.png" width="1200">
+            <img src="img/fifthelement/b.jpg" width="1200">
+
+
+
+
+ <div id="Texture Synthesis">
+      <h2><span>1. Source images "The Night Cafe"</span></h2>
+        <p>The image is The Night Cafe, a master piece of Vincent van Gogh.</p>
+        <img src="img/room/src.jpg" width="1200">
+            
+      <h2><span>2. Points, lines and polygons</span></h3>
+          <p>Draw points, lines </p>
+          <img src="img/room/vp.png" width="1200">
+      <h2><span>3. Procedure of making the 3D model</span></h2>
+         <p>Similar to the previous one.</p>
+
+        <h2><span>4. Text outputs in a terminal</span></h2>
+            <p>Compute the vanishing points. Text outputs in a terminal of "Tools->Compute_VPs".</p>
+          <img src="img/room/vp2.png" width="500">
+          
+            <p>Text outputs in a terminal of "Tools->Compute Homography".</p>
+            <img src="img/room/hmatrix.png" width="500"><br>
+            <p>Draw several polygons of the images.</p>
+            <img src="img/room/polygon.png" width="1200"><br>
+          <h2><span>5. Still images (rendering) of the reconstructed VRML models</span></h2>
+
+                <p>The 3D model result displayed in MeshLab.</p>
+            <img src="img/room/3Dmodel.png" width="1200">
+            <img src="img/room/room01.png" width="1200">
+      
+           <h2><span>6. Texture map images</span></h2>
+
+            <p>Texture images: up, back, ground, right, left faces of the model generated.</p>
+             <img src="img/room/case1.gif" width="200">
+            <img src="img/room/case2.gif" width="200">
+            <img src="img/room/case4.gif" width="200">
+            <img src="img/room/desk1.gif" width="200">
+            <img src="img/room/desk2.gif" width="200"><br>
+            <img src="img/room/desk3.gif" width="200">
+            <img src="img/room/desk4.gif" width="200">
+            <img src="img/room/desk5.gif" width="200">
+            <img src="img/room/ground.gif" width="200">
+            <img src="img/room/wall3.gif" width="200"><br>
+            <img src="img/room/wall4.gif" width="200">
+            <img src="img/room/wall6.gif" width="200">
+            <img src="img/room/wall7.gif" width="200">
+          
+
+        <h2><span>7. Use different polygons</span></h2>
+            <img src="img/room/newpoly.png" width="1200"><br>
+            <img src="img/room/room02.png" width="1200"><br>
+            <img src="img/room/3d2.png" width="1200"><br>
+            <img src="img/room/van3.png" width="1200"><br>
+
+
+    <div id="bell">
+      <h2><span>Bell & Whistles(Extra Points)</span></h2>
+
+
+     
+
+
+    
+
+    <div id="reference">
+      <h2><span>Reference</span></h2>
+      <ul>
+        <li><a href="http://www.cs.cmu.edu/~ph/869/www/notes/vanishing.txt">A brief method of BestFitIntersections</a></li>
+      </ul>
+    </div>
+    </section>
+    <footer>
+    &copy; 2016 Ying Wang. All Rights Reserved.
+    </footer>
+  </body>
+</html>
+
+
